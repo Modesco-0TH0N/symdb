@@ -2,15 +2,19 @@
 
 
 {% block main %}
-<main class="main row">
-
-    <div class="sidebar col-12 col-sm-5 col-lg-3">
-        {{ include('./sidebar.html.twig') }}
-    </div>
-    <div class="general col-12 col-sm-7 col-lg-9">
-        General info
-    </div>
-</main>
+        {% if balances is defined %}
+            Your wallet balance:
+            <br><br>
+            <table>
+                {% for key, balance in balances %}
+                    <tr>
+                        <td>{{ key ?? '' }}:&nbsp&nbsp</td>
+                        <td>{{ balance ?? '' }}&nbsp&nbsp</td>
+                        <td>Обменять</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
 {% endblock %}
 
 
