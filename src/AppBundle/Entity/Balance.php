@@ -23,14 +23,14 @@ class Balance
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="balances")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Ticker", inversedBy="balances")
+     * @ORM\ManyToOne(targetEntity="Ticker")
      * @ORM\JoinColumn(name="ticker_id", referencedColumnName="id")
      */
     private $ticker;
