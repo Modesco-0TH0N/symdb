@@ -60,7 +60,7 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="is_active", type="boolean", nullable=false, options={"default" : true})
      */
-    private $isActive = false;
+    private $isActive = true;
 
     /**
      * @return mixed

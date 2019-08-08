@@ -15,19 +15,13 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $user = $this->getUser();
-        $userProperties = [];
+        $params = [];
         if (isset($user)) {
-            $userProperties['username'] = $user->getUsername();
+            $params['username'] = $user->getUsername();
             $entityManager = $this->getDoctrine()->getManager();
             $wallet = new Wallet($user, $entityManager);
-            $userProperties['balances'] = [];
-            $currencies = $wallet->getCurrencies();
-            foreach ($currencies as $currency) {
-                $ticker = $currency->getTicker()->getDescription();
-                $userProperties['balances'][$ticker] = $currency->getAmount();
-            }
+            $params['balances'] = $wallet->getCurrencies();
         }
-        $params = array_merge($userProperties, [], []);
         return $this->render('./default/index.html.twig', $params);
     }
 }
