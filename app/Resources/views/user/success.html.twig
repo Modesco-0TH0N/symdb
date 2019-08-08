@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+
+{% block main %}
+    <main class="main row">
+
+        <div class="sidebar col-12 col-sm-5 col-lg-3">
+            {{ include('./sidebar.html.twig', {'newUser' : 'active'}) }}
+        </div>
+        <div class="general col-12 col-sm-7 col-lg-9">
+            Congratulations! New user registered successful!
+        </div>
+    </main>
+{% endblock %}
+
+
+
+
