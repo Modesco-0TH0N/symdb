@@ -23,14 +23,14 @@ class Transaction
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="transactions")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Ticker", inversedBy="transactions")
+     * @ORM\ManyToOne(targetEntity="Ticker")
      * @ORM\JoinColumn(name="ticker_1", referencedColumnName="id")
      */
     private $ticker1;
@@ -42,14 +42,14 @@ class Transaction
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Ticker", inversedBy="transactions")
+     * @ORM\ManyToOne(targetEntity="Ticker")
      * @ORM\JoinColumn(name="rate", referencedColumnName="id")
      */
     private $rate;
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Ticker", inversedBy="transactions")
+     * @ORM\ManyToOne(targetEntity="Ticker")
      * @ORM\JoinColumn(name="ticker_2", referencedColumnName="id")
      */
     private $ticker2;

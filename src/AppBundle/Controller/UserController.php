@@ -24,6 +24,8 @@ class UserController extends Controller
 
     /**
      * @Route("/user/new", name="new_user_form")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function showNewUserForm(Request $request)
     {
@@ -55,12 +57,11 @@ class UserController extends Controller
     }
 
     /**
-     * @param ConstraintViolation[] $errors
+     * @param $errors
      * @return array
      */
     private function getErrors($errors)
     {
-        /** @var ConstraintViolation $err */
         $err = [];
 
         foreach ($errors as $error) {
@@ -80,6 +81,8 @@ class UserController extends Controller
 
     /**
      * @Route("/user/success/", name="user_registered_successful")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showUserRegisteredSuccessful(Request $request)
     {
