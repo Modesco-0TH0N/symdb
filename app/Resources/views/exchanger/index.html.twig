@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+
+{% block main %}
+    <div>Charge your balance</div>
+    <br>
+
+    {{ form_start(form) }}
+
+    <div class="form-group">
+        <label for="form_amount1">{{ tick }}:&nbsp {{ tickerBalance }}</label>
+        {{ form_widget(form.amount1, { 'attr': {
+            'class': 'form-control',
+            'type': 'text',
+            'placeholder': 'Enter amount'
+        } }) }}
+    </div>
+
+    <div class="form-group">
+        <label for="form_ticker2">Choose other ticker</label>
+        {{ form_widget(form.ticker2, { 'attr': {
+            'class': 'form-control',
+            'type': 'choise',
+        } }) }}
+    </div>
+
+    {{ form_widget(form.save, { 'attr': {
+        'type': 'submit',
+        'class': 'btn btn-primary'
+    } }) }}
+
+    {{ form_end(form) }}
+
+    <br>
+
+    <table>
+        {% for rate in rates %}
+            <tr>
+                <td>{{ rate.ticker1 }}</td>
+                <td>&nbsp=>&nbsp</td>
+                <td>{{ rate.ticker2 }}</td>
+                <td>&nbsp:&nbsp</td>
+                <td>{{ rate.price }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+
+
+
