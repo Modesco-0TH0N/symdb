@@ -23,14 +23,14 @@ class Rate
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Ticker", inversedBy="rates")
+     * @ORM\ManyToOne(targetEntity="Ticker")
      * @ORM\JoinColumn(name="ticker_1", referencedColumnName="id")
      */
     private $ticker1;
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Ticker", inversedBy="rates")
+     * @ORM\ManyToOne(targetEntity="Ticker")
      * @ORM\JoinColumn(name="ticker_2", referencedColumnName="id")
      */
     private $ticker2;
