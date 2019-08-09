@@ -26,8 +26,8 @@ class ChargerController extends Controller
      */
     public function charge(Request $request, $tick = null)
     {
-        $user = $this->getUser();
-        $ticker = $this->getDoctrine()->getRepository(Ticker::class)->findOneBy(['name' => $tick]);
+        $user    = $this->getUser();
+        $ticker  = $this->getDoctrine()->getRepository(Ticker::class)->findOneBy(['name' => $tick]);
         $payment = new Payment($user, $ticker);
 
         $form = $this->createFormBuilder($payment)
@@ -37,8 +37,8 @@ class ChargerController extends Controller
 
         $form->handleRequest($request);
         $validator = $this->get('validator');
-        $payment = $form->getData();
-        $errors = $this->getErrors($validator->validate($payment));
+        $payment   = $form->getData();
+        $errors    = $this->getErrors($validator->validate($payment));
 
         if ($form->isSubmitted() && $form->isValid() && (count($errors) === 0)) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -50,8 +50,8 @@ class ChargerController extends Controller
         }
 
         return $this->render('./charger/index.html.twig', [
-            'tick' => $tick,
-            'form' => $form->createView(),
+            'tick'   => $tick,
+            'form'   => $form->createView(),
             'errors' => $errors
         ]);
 
