@@ -6,6 +6,9 @@ namespace AppBundle\Domain;
 
 use AppBundle\Entity\Balance;
 use AppBundle\Entity\Rate;
+use AppBundle\Entity\Transaction;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * Class Exchanger
@@ -14,6 +17,10 @@ use AppBundle\Entity\Rate;
 class Exchanger
 {
     private $user;
+
+    /**
+     * @var EntityManager
+     */
     private $entityManager;
 
     /**
@@ -27,6 +34,11 @@ class Exchanger
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param Transaction $transaction
+     * @return mixed
+     * @throws OptimisticLockException
+     */
     public function change($transaction)
     {
         $rateRepository = $this->entityManager->getRepository(Rate::class);
@@ -40,21 +52,21 @@ class Exchanger
         $balanceRepository = $this->entityManager->getRepository(Balance::class);
 
         $balance1 = $balanceRepository->findOneBy([
-            'user' => $this->user,
+            'user'   => $this->user,
             'ticker' => $transaction->getTicker1()
         ]);
         $balance1 = $balance1 ? $balance1 : new Balance($this->user, $transaction->getTicker1());
         $balance1->setAmount($balance1->getAmount() - $transaction->getAmount1());
-        $this->entityManager->persist($balance1);
 
         $balance2 = $balanceRepository->findOneBy([
-            'user' => $this->user,
+            'user'   => $this->user,
             'ticker' => $transaction->getTicker2()
         ]);
         $balance2 = $balance2 ? $balance2 : new Balance($this->user, $transaction->getTicker2());
         $balance2->setAmount($balance2->getAmount() + $transaction->getAmount2());
-        $this->entityManager->persist($balance2);
 
+        $this->entityManager->persist($balance1);
+        $this->entityManager->persist($balance2);
         $this->entityManager->flush();
 
         return $transaction;
