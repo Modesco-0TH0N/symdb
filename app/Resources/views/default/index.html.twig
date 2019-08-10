@@ -2,22 +2,22 @@
 
 
 {% block main %}
-        {% if balances is defined %}
-            Your wallet balance:
-            <br><br>
-            <table>
-                {% for key, balance in balances %}
-                    <tr>
-                        <td>{{ key }}:&nbsp&nbsp</td>
-                        <td>{{ balance }}&nbsp&nbsp</td>
-                        <td><a href="/change/{{ key }}" class="btn btn-primary">Обменять</a></td>
-                        <td><a href="/charge/{{ key }}" class="btn btn-primary">Пополнить</a></td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <h2>Welcome to our site!</h2>
-        {% endif %}
+    {% if balances is defined %}
+        Your wallet balance:
+        <br><br>
+        <table>
+            {% for key, balance in balances %}
+                <tr>
+                    <td>{{ key }}:&nbsp&nbsp</td>
+                    <td>{{ balance }}&nbsp&nbsp</td>
+                    <td><a href="/change/{{ key }}" class="btn btn-primary">Обменять</a></td>
+                    <td><a href="/charge/{{ key }}" class="btn btn-primary">Пополнить</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <h2>Welcome to our site!</h2>
+    {% endif %}
 {% endblock %}
 
 

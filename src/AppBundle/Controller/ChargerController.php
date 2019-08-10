@@ -40,6 +40,7 @@ class ChargerController extends Controller
         $payment   = $form->getData();
         $errors    = $this->getErrors($validator->validate($payment));
 
+        //
         if ($form->isSubmitted() && $form->isValid() && (count($errors) === 0)) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($payment);
@@ -48,14 +49,13 @@ class ChargerController extends Controller
             $wallet->charge($payment);
             return $this->redirectToRoute('homepage');
         }
+        //
 
         return $this->render('./charger/index.html.twig', [
             'tick'   => $tick,
             'form'   => $form->createView(),
             'errors' => $errors
         ]);
-
-        return $this->render('./charger/index.html.twig', ["tick" => $tick]);
     }
 
     /**
