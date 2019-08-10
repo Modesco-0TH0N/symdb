@@ -57,6 +57,7 @@ class Exchanger
         ]);
         $balance1 = $balance1 ? $balance1 : new Balance($this->user, $transaction->getTicker1());
         $balance1->setAmount($balance1->getAmount() - $transaction->getAmount1());
+        $this->entityManager->persist($balance1);
 
         $balance2 = $balanceRepository->findOneBy([
             'user'   => $this->user,
@@ -65,7 +66,6 @@ class Exchanger
         $balance2 = $balance2 ? $balance2 : new Balance($this->user, $transaction->getTicker2());
         $balance2->setAmount($balance2->getAmount() + $transaction->getAmount2());
 
-        $this->entityManager->persist($balance1);
         $this->entityManager->persist($balance2);
         $this->entityManager->flush();
 
