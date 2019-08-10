@@ -2,7 +2,7 @@
 
 
 {% block main %}
-    {% if balances is defined %}
+    {% if app.request.hasPreviousSession and balances is defined %}
         Your wallet balance:
         <br><br>
         <table>
