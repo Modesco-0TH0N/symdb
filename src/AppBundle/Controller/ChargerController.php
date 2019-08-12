@@ -5,10 +5,8 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Utils\Utils;
-use AppBundle\Domain\Wallet;
 use AppBundle\Entity\Payment;
 use AppBundle\Entity\Ticker;
-use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -18,6 +16,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
+/**
+ * Class ChargerController
+ * @package AppBundle\Controller
+ */
 class ChargerController extends Controller
 {
     /**

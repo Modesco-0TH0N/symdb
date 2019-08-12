@@ -19,6 +19,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
+/**
+ * Class ExchangerController
+ * @package AppBundle\Controller
+ */
 class ExchangerController extends Controller
 {
     /**
