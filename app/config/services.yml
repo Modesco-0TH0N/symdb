@@ -33,3 +33,14 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    app.domain.wallet:
+        class: AppBundle\Domain\Wallet
+        public: true
+        arguments: ["@doctrine.orm.entity_manager"]
+
+    app.domain.exchanger:
+        class: AppBundle\Domain\Exchanger
+        public: true
+        arguments: ['@doctrine.orm.entity_manager']
+

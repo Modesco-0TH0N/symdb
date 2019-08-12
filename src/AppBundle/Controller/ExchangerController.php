@@ -3,12 +3,10 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Domain\Exchanger;
-use AppBundle\Domain\Wallet;
-use AppBundle\Entity\Payment;
+
+use AppBundle\Utils\Utils;
 use AppBundle\Entity\Ticker;
 use AppBundle\Entity\Transaction;
-use AppBundle\Entity\User;
 use AppBundle\Entity\Balance;
 use AppBundle\Entity\Rate;
 use Exception;
@@ -16,22 +14,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class ExchangerController extends Controller
 {
     /**
-     * @Route("/change/{tick}", name="change")
      * @param Request $request
-     * @param null $tick
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param String $tick
+     * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function change(Request $request, $tick = null)
+    public function change(Request $request, $tick = '')
     {
-        $user = $this->getUser();
-        $ticker = $this->getDoctrine()->getRepository(Ticker::class)->findOneBy(['name' => $tick]);
+        $user    = $this->getUser();
+        $ticker  = $this->getDoctrine()->getRepository(Ticker::class)->findOneBy(['name' => $tick]);
         $tickers = $this->getDoctrine()->getRepository(Ticker::class)->findAll();
         $tickers = $this->remakeTickers($tickers, $tick);
 
@@ -44,20 +43,18 @@ class ExchangerController extends Controller
             ->getForm();
 
         $form->handleRequest($request);
-        $validator = $this->get('validator');
+        $validator   = $this->get('validator');
+        /** @var Transaction $transaction */
         $transaction = $form->getData();
-        $ticker2 = $this->getDoctrine()->getRepository(Ticker::class)->findOneBy([
+        $ticker2     = $this->getDoctrine()->getRepository(Ticker::class)->findOneBy([
             'name' => $transaction->getTicker2(),
         ]);
         $transaction->setTicker2($ticker2);
-        $errors = $this->getErrors($validator->validate($transaction));
+        $errors = Utils::getErrors($validator->validate($transaction));
 
         if ($form->isSubmitted() && $form->isValid() && (count($errors) === 0)) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $exchanger = new Exchanger($user, $entityManager);
-            $transaction = $exchanger->change($transaction);
-            $entityManager->persist($transaction);
-            $entityManager->flush();
+            $exchanger = $this->get('app.domain.exchanger');
+            $exchanger->change($user, $transaction);
             return $this->redirectToRoute('homepage');
         }
 
@@ -69,6 +66,7 @@ class ExchangerController extends Controller
         $tickerBalance = $balance->getAmount();
         $rates = $this->getDoctrine()->getRepository(Rate::class)->findBy(['ticker1' => $ticker]);
         $rates = array_map(function ($rate) {
+            /** @var Rate $rate */
             return [
                 'ticker1' => $rate->getTicker1()->getName(),
                 'ticker2' => $rate->getTicker2()->getName(),
@@ -76,7 +74,7 @@ class ExchangerController extends Controller
             ];
         }, $rates);
 
-        return $this->render('./exchanger/index.html.twig', [
+        return $this->render('exchanger/index.html.twig', [
             'tick' => $tick,
             'form' => $form->createView(),
             'errors' => $errors,
@@ -86,26 +84,14 @@ class ExchangerController extends Controller
     }
 
     /**
-     * @param $errors
-     * @return array
+     * @param $tickers
+     * @param $tick
+     * @return array|null
      */
-    private function getErrors($errors)
-    {
-        $err = [];
-
-        foreach ($errors as $error) {
-            if (!isset($err[$error->getPropertyPath()])) {
-                $err[$error->getPropertyPath()] = [];
-            }
-            $err[$error->getPropertyPath()][] = $error;
-        }
-
-        return $err;
-    }
-
     private function remakeTickers($tickers, $tick)
     {
         $tickers = array_flip(array_map(function($ticker) {
+            /** @var Ticker $ticker */
             return $ticker->getName();
         }, $tickers));
         foreach ($tickers as $key => $value) {

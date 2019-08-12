@@ -4,6 +4,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Serializable;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
@@ -11,7 +12,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
-class User implements AdvancedUserInterface, \Serializable
+class User implements AdvancedUserInterface, Serializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -165,7 +166,7 @@ class User implements AdvancedUserInterface, \Serializable
      * and populated in any number of different ways when the user object
      * is created.
      *
-     * @return (Role|string)[] The user roles
+     * @return array (Role|string)[] The user roles
      */
     public function getRoles()
     {

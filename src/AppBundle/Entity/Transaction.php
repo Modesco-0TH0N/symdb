@@ -4,9 +4,9 @@
 namespace AppBundle\Entity;
 
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
-use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -80,7 +80,7 @@ class Transaction
                                 $ticker2 = null, $amount2 = null, $date = 'now')
     {
         if ($date === 'now') {
-            $date = new \DateTime();
+            $date = new DateTime();
         }
 
         $this->setUser($user)->setTicker1($ticker1)->setAmount1($amount1)
