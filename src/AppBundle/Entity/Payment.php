@@ -4,9 +4,9 @@
 namespace AppBundle\Entity;
 
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
-use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -57,7 +57,7 @@ class Payment
     public function __construct($user, $ticker, $amount = 0, $date = 'now')
     {
         if ($date === 'now') {
-            $date = new \DateTime();
+            $date = new DateTime();
         }
         $this->setUser($user)->setTicker($ticker)->setAmount($amount)->setDate($date);
     }

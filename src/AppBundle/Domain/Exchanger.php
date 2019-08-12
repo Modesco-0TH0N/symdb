@@ -16,8 +16,6 @@ use Doctrine\ORM\OptimisticLockException;
  */
 class Exchanger
 {
-    private $user;
-
     /**
      * @var EntityManager
      */
@@ -25,21 +23,20 @@ class Exchanger
 
     /**
      * Wallet constructor.
-     * @param $user
      * @param $entityManager
      */
-    public function __construct($user, $entityManager)
+    public function __construct($entityManager)
     {
-        $this->user = $user;
         $this->entityManager = $entityManager;
     }
 
     /**
+     * @param $user
      * @param Transaction $transaction
      * @return mixed
      * @throws OptimisticLockException
      */
-    public function change($transaction)
+    public function change($user, $transaction)
     {
         $rateRepository = $this->entityManager->getRepository(Rate::class);
         $rate = $rateRepository->findOneBy([
@@ -52,21 +49,22 @@ class Exchanger
         $balanceRepository = $this->entityManager->getRepository(Balance::class);
 
         $balance1 = $balanceRepository->findOneBy([
-            'user'   => $this->user,
+            'user'   => $user,
             'ticker' => $transaction->getTicker1()
         ]);
-        $balance1 = $balance1 ? $balance1 : new Balance($this->user, $transaction->getTicker1());
+        $balance1 = $balance1 ? $balance1 : new Balance($user, $transaction->getTicker1());
         $balance1->setAmount($balance1->getAmount() - $transaction->getAmount1());
         $this->entityManager->persist($balance1);
 
         $balance2 = $balanceRepository->findOneBy([
-            'user'   => $this->user,
+            'user'   => $user,
             'ticker' => $transaction->getTicker2()
         ]);
-        $balance2 = $balance2 ? $balance2 : new Balance($this->user, $transaction->getTicker2());
+        $balance2 = $balance2 ? $balance2 : new Balance($user, $transaction->getTicker2());
         $balance2->setAmount($balance2->getAmount() + $transaction->getAmount2());
 
         $this->entityManager->persist($balance2);
+        $this->entityManager->persist($transaction);
         $this->entityManager->flush();
 
         return $transaction;

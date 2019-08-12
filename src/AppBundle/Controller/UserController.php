@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\User;
+use AppBundle\Utils\Utils;
 
 class UserController extends Controller
 {
@@ -41,7 +42,7 @@ class UserController extends Controller
         $form->handleRequest($request);
         $validator = $this->get('validator');
         $user = $form->getData();
-        $errors = $this->getErrors($validator->validate($user));
+        $errors = Utils::getErrors($validator->validate($user));
         $user->setRole('user')->setPassword($this->encodePassword($user->getPlainPassword()))->eraseCredentials();
 
         if ($form->isSubmitted() && $form->isValid() && (count($errors) === 0)) {
@@ -55,24 +56,6 @@ class UserController extends Controller
             'form' => $form->createView(),
             'errors' => $errors
         ]);
-    }
-
-    /**
-     * @param $errors
-     * @return array
-     */
-    private function getErrors($errors)
-    {
-        $err = [];
-
-        foreach ($errors as $error) {
-            if (!isset($err[$error->getPropertyPath()])) {
-                $err[$error->getPropertyPath()] = [];
-            }
-            $err[$error->getPropertyPath()][] = $error;
-        }
-
-        return $err;
     }
 
     private function encodePassword($pass)

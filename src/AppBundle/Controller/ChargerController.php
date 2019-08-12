@@ -3,28 +3,30 @@
 
 namespace AppBundle\Controller;
 
+
+use AppBundle\Utils\Utils;
 use AppBundle\Domain\Wallet;
 use AppBundle\Entity\Payment;
 use AppBundle\Entity\Ticker;
-use AppBundle\Entity\User;
+use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class ChargerController extends Controller
 {
     /**
-     * @Route("/charge/{tick}", name="charge")
      * @param Request $request
-     * @param null $tick
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param String $tick
+     * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function charge(Request $request, $tick = null)
+    public function charge(Request $request, String $tick = '')
     {
         $user    = $this->getUser();
         $ticker  = $this->getDoctrine()->getRepository(Ticker::class)->findOneBy(['name' => $tick]);
@@ -38,41 +40,20 @@ class ChargerController extends Controller
         $form->handleRequest($request);
         $validator = $this->get('validator');
         $payment   = $form->getData();
-        $errors    = $this->getErrors($validator->validate($payment));
+        $errors    = Utils::getErrors($validator->validate($payment));
 
         //
         if ($form->isSubmitted() && $form->isValid() && (count($errors) === 0)) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($payment);
-            $entityManager->flush();
-            $wallet = new Wallet($user, $entityManager);
-            $wallet->charge($payment);
+            $wallet = $this->get('app.domain.wallet');
+            $wallet->charge($user, $payment);
             return $this->redirectToRoute('homepage');
         }
         //
 
-        return $this->render('./charger/index.html.twig', [
+        return $this->render('charger/index.html.twig', [
             'tick'   => $tick,
             'form'   => $form->createView(),
             'errors' => $errors
         ]);
-    }
-
-    /**
-     * @param $errors
-     * @return array
-     */
-    private function getErrors($errors)
-    {
-        $err = [];
-
-        foreach ($errors as $error) {
-            if (!isset($err[$error->getPropertyPath()])) {
-                $err[$error->getPropertyPath()] = [];
-            }
-            $err[$error->getPropertyPath()][] = $error;
-        }
-
-        return $err;
     }
 }
