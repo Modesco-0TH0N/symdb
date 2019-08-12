@@ -3,30 +3,34 @@
 
 namespace AppBundle\Controller;
 
+
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\HttpFoundation\RedirectResponse as RedirectResponseAlias;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use AppBundle\Utils\Utils;
 use AppBundle\Entity\User;
+
 
 class UserController extends Controller
 {
     /**
-     * @Route("/user/", name="user")
+     * @return Response
+     * @throws Exception
      */
-    public function showUserIndex()
+    public function showUserIndex(): Response
     {
         return $this->render('user/index.html.twig');
     }
 
     /**
-     * @Route("/user/new", name="new_user_form")
      * @param Request $request
-     * @return RedirectResponseAlias|Response
+     * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function showNewUserForm(Request $request)
     {
@@ -41,7 +45,7 @@ class UserController extends Controller
         $form->handleRequest($request);
         $validator = $this->get('validator');
         $user = $form->getData();
-        $errors = $this->getErrors($validator->validate($user));
+        $errors = Utils::getErrors($validator->validate($user));
         $user->setRole('user')->setPassword($this->encodePassword($user->getPlainPassword()))->eraseCredentials();
 
         if ($form->isSubmitted() && $form->isValid() && (count($errors) === 0)) {
@@ -57,23 +61,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * @param $errors
-     * @return array
-     */
-    private function getErrors($errors)
-    {
-        $err = [];
-
-        foreach ($errors as $error) {
-            if (!isset($err[$error->getPropertyPath()])) {
-                $err[$error->getPropertyPath()] = [];
-            }
-            $err[$error->getPropertyPath()][] = $error;
-        }
-
-        return $err;
-    }
 
     private function encodePassword($pass)
     {
@@ -81,11 +68,10 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/user/success/", name="user_registered_successful")
-     * @param Request $request
      * @return Response
+     * @throws Exception
      */
-    public function showUserRegisteredSuccessful(Request $request)
+    public function showUserRegisteredSuccessful(): Response
     {
         return $this->render('user/success.html.twig');
     }
