@@ -3,6 +3,7 @@
 
 namespace AppBundle\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -10,22 +11,25 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse as RedirectResponseAlias;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\User;
 use AppBundle\Utils\Utils;
 
+
+/**
+ * Class UserController
+ * @package AppBundle\Controller
+ */
 class UserController extends Controller
 {
     /**
-     * @Route("/user/", name="user")
+     * @return Response
      */
-    public function showUserIndex()
+    public function showUserIndex(): Response
     {
         return $this->render('user/index.html.twig');
     }
 
     /**
-     * @Route("/user/new", name="new_user_form")
      * @param Request $request
      * @return RedirectResponseAlias|Response
      */
@@ -64,11 +68,10 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/user/success/", name="user_registered_successful")
      * @param Request $request
      * @return Response
      */
-    public function showUserRegisteredSuccessful(Request $request)
+    public function showUserRegisteredSuccessful(Request $request): Response
     {
         return $this->render('user/success.html.twig');
     }
