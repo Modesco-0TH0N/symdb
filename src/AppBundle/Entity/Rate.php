@@ -5,7 +5,6 @@ namespace AppBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -72,6 +71,7 @@ class Rate
      */
     protected function setTicker1($ticker1)
     {
+        /** @var Rate $this */
         $this->ticker1 = $ticker1;
         return $this;
     }
