@@ -4,7 +4,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 
@@ -80,7 +79,7 @@ class Balance
     /**
      * @return mixed
      */
-    public function getTicker()
+    public function getTicker():Ticker
     {
         return $this->ticker;
     }

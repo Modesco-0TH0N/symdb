@@ -7,6 +7,8 @@
         "psr-4": {
             "AppBundle\\": "src/AppBundle"
         },
+        "files": [
+        ],
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
     "autoload-dev": {

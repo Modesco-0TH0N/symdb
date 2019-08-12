@@ -2,26 +2,23 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Domain\Wallet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @return Response
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $user = $this->getUser();
         $params = [];
         if (isset($user)) {
             $params['username'] = $user->getUsername();
-            $entityManager = $this->getDoctrine()->getManager();
-            $wallet = new Wallet($user, $entityManager);
-            $params['balances'] = $wallet->getCurrencies();
+            $wallet = $this->get('app.domain.wallet');
+            $params['balances'] = $wallet->getCurrencies($user);
         }
-        return $this->render('./default/index.html.twig', $params);
+        return $this->render('default/index.html.twig', $params);
     }
 }

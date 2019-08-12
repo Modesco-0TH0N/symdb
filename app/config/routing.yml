@@ -4,3 +4,31 @@ app:
 
 logout:
     path: /logout/
+
+homepage:
+    path: /
+    defaults: { _controller: AppBundle:Default:index }
+
+charge:
+    path: /charge/{tick}/
+    defaults: { _controller: AppBundle\Controller\ChargerController::charge }
+
+change:
+    path: /change/{tick}/
+    defaults: { _controller: AppBundle\Controller\ExchangerController::change }
+
+login:
+    path: /login/
+    defaults: { _controller: AppBundle:Security:login }
+
+user:
+    path: /user/
+    defaults: { _controller: AppBundle\Controller\UserController::showUserIndex }
+
+new_user_form:
+    path: /user/new/
+    defaults: { _controller: AppBundle\Controller\UserController::showNewUserForm }
+
+user_registered_successful:
+    path: /user/success/
+    defaults: { _controller: AppBundle\Controller\UserController::showUserRegisteredSuccessful }
