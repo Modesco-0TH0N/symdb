@@ -22,7 +22,7 @@ class DefaultController extends Controller
         $params = [];
         if (isset($user)) {
             $params['username'] = $user->getUsername();
-            $wallet = $this->get('app.domain.wallet');
+            $wallet = $this->get('app.wallet_manager');
             $params['balances'] = $wallet->getCurrencies($user);
         }
         return $this->render('default/index.html.twig', $params);

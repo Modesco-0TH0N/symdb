@@ -57,7 +57,7 @@ class ExchangerController extends Controller
         $errors = Utils::getErrors($validator->validate($transaction));
 
         if ($form->isSubmitted() && $form->isValid() && (count($errors) === 0)) {
-            $exchanger = $this->get('app.domain.exchanger');
+            $exchanger = $this->get('app.exchanger_manager');
             $exchanger->change($user, $transaction);
             return $this->redirectToRoute('homepage');
         }
