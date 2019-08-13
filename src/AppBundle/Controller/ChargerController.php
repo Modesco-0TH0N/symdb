@@ -46,7 +46,7 @@ class ChargerController extends Controller
 
         //
         if ($form->isSubmitted() && $form->isValid() && (count($errors) === 0)) {
-            $wallet = $this->get('app.domain.wallet');
+            $wallet = $this->get('app.wallet_manager');
             $wallet->charge($user, $payment);
             return $this->redirectToRoute('homepage');
         }

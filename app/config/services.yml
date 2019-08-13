@@ -34,12 +34,12 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
-    app.domain.wallet:
+    app.wallet_manager:
         class: AppBundle\Domain\Wallet
         public: true
         arguments: ["@doctrine.orm.entity_manager"]
 
-    app.domain.exchanger:
+    app.exchanger_manager:
         class: AppBundle\Domain\Exchanger
         public: true
         arguments: ['@doctrine.orm.entity_manager']
