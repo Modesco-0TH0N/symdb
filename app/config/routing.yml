@@ -9,6 +9,14 @@ homepage:
     path: /
     defaults: { _controller: AppBundle:Default:index }
 
+phpinfo:
+    path: /phpinfo/
+    defaults: { _controller: AppBundle\Controller\DefaultController::phpinfo }
+
+json1:
+    path: /json1/
+    defaults: { _controller: AppBundle\Controller\DefaultController::json1 }
+
 charge:
     path: /charge/{tick}/
     defaults: { _controller: AppBundle\Controller\ChargerController::charge }

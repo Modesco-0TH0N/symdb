@@ -3,7 +3,7 @@
 
 {% block main %}
     {% if app.request.hasPreviousSession and balances is defined %}
-        Your wallet balance:
+        Your {{ 'wallet' | upper }} balance:
         <br><br>
         <table>
             {% for key, balance in balances %}
