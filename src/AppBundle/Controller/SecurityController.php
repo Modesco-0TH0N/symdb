@@ -31,4 +31,8 @@ class SecurityController extends Controller
         ]);
     }
 
+    public function newFunction()
+    {
+        return true;
+    }
 }
