@@ -47,7 +47,7 @@ class UserController extends Controller
         $validator = $this->get('validator');
         $user = $form->getData();
         $errors = Utils::getErrors($validator->validate($user));
-        $user->setRole('user')->setPassword($this->encodePassword($user->getPlainPassword()))->eraseCredentials();
+        $user->setRole('user')->setPassword($user->encodePassword($user->getPlainPassword()))->eraseCredentials();
 
         if ($form->isSubmitted() && $form->isValid() && (count($errors) === 0)) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -60,11 +60,6 @@ class UserController extends Controller
             'form' => $form->createView(),
             'errors' => $errors
         ]);
-    }
-
-    private function encodePassword($pass)
-    {
-        return password_hash($pass, PASSWORD_BCRYPT);
     }
 
     /**

@@ -44,3 +44,9 @@ services:
         public: true
         arguments: ['@doctrine.orm.entity_manager']
 
+    app.memcached.client:
+        class: Symfony\Component\Cache\Adapter\MemcachedAdapter
+        factory: ["Symfony\\Component\\Cache\\Adapter\\MemcachedAdapter", createConnection]
+        public: true
+        arguments: ["memcached://%memcached.host%:%memcached.port%"]
+

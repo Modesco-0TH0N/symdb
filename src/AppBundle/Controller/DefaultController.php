@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 
+use Monolog\Handler\ChromePHPHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,6 +29,11 @@ class DefaultController extends Controller
             $wallet = $this->get('app.wallet_manager');
             $params['balances'] = $wallet->getCurrencies($user);
         }
+
+        $cache = $this->get('app.memcached.client');
+        $cache->set('mykey', 'foo', 3600);
+        $a = $cache->get('mykey');
+
         return $this->render('default/index.html.twig', $params);
     }
 
@@ -53,5 +59,13 @@ class DefaultController extends Controller
         }
 
         return new JsonResponse($params);
+    }
+
+    /**
+     * getenv function
+     */
+    public function getEnvorinmentVariables()
+    {
+        echo getenv();
     }
 }

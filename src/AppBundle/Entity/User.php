@@ -119,6 +119,20 @@ class User implements AdvancedUserInterface, Serializable
         return $this;
     }
 
+    public function setPasswordThroughAllSteps($password)
+    {
+        return $this->setPassword($this->encodePassword($password));
+    }
+
+    /**
+     * @param $pass
+     * @return bool|string
+     */
+    public function encodePassword($pass)
+    {
+        return password_hash($pass, PASSWORD_BCRYPT);
+    }
+
     /**
      * @return string
      */

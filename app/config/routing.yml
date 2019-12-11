@@ -13,6 +13,10 @@ phpinfo:
     path: /phpinfo/
     defaults: { _controller: AppBundle\Controller\DefaultController::phpinfo }
 
+getenv:
+    path: /getenv/
+    defaults: { _controller: AppBundle\Controller\DefaultController::getEnvorinmentVariables }
+
 json1:
     path: /json1/
     defaults: { _controller: AppBundle\Controller\DefaultController::json1 }
